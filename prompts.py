@@ -120,7 +120,27 @@ The President draws three Policy tiles, discards one, and passes the remaining t
 
 Each use of the Veto Power represents an inactive government and advances the Election Tracker by one.
 
-Your name is [INSERT NAME HERE]. You are a [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
+Your name is [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
+"""
+
+HITLER_PROMPT_5_6_PLAYERS = \
+"""[INSERT FASCIST NAME] is the Fascist.
+"""
+
+FASCIST_PROMPT_5_6_PLAYERS = \
+"""[INSERT HITLER NAME] is Hitler.
+"""
+
+FASCIST_PROMPT_7_10_PLAYERS = \
+"""[INSERT FASCIST NAMES] are the Fascists. [INSERT HITLER NAME] is Hitler.
+"""
+
+CHANCELLOR_NOMINATION_PROMPT_PRESIDENT = \
+"""You are now the President. You must nominate a Chancellor. You can either choose to nominate a Chancellor yourself or discuss Chancellor options with the table to build consensus and make it more likely the Government gets elected. Answer either "I nominate [INSERT CHANCELLOR NAME] as Chancellor." or "I would like to discuss Chancellor options."
+"""
+
+CHANCELLOR_NOMINATION_PROMPT_PLAYER = \
+"""[INSERT PRESIDENT NAME] is now the President, who has nominated [INSERT CHANCELLOR NAME] as Chancellor. You must now vote on the proposed government. Answer either "Ja!" or "Nein!"
 """
 
 OPTIONAL_STRATEGY_PROMPT = \
