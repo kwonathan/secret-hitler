@@ -22,14 +22,14 @@ def generate_roles(number_of_players):
     return roles
 
 
-def populate_main_prompt(players, name, role):
+def populate_main_prompt(players, player):
     num_players = len(players)
     prompt = prompts.MAIN_PROMPT.replace("[INSERT NUMBER OF PLAYERS HERE]", num_players)
     player_names = ", ".join([player.name for player in players[:-1]]) + f", and {players[-1].name}"
     prompt = prompt.replace("[INSERT PLAYER NAMES HERE]", player_names)
-    prompt = prompt.replace("[INSERT NAME HERE]", name)
-    prompt = prompt.replace("[INSERT ROLE HERE]", role)
-    prompt = prompt.replace("[INSERT PARTY HERE]", "Liberal" if role == "Liberal" else "Fascist")
+    prompt = prompt.replace("[INSERT NAME HERE]", player.name)
+    prompt = prompt.replace("[INSERT ROLE HERE]", player.role)
+    prompt = prompt.replace("[INSERT PARTY HERE]", "Liberal" if player.role == "Liberal" else "Fascist")
     if num_players == 5:
         prompt = prompt.replace("[INSERT NUMBER OF LIBERALS]", 3)
         prompt = prompt.replace("[INSERT NUMBER OF FASCISTS]", 1)
