@@ -122,7 +122,9 @@ The President draws three Policy tiles, discards one, and passes the remaining t
 
 Each use of the Veto Power represents an inactive government and advances the Election Tracker by one.
 
-Your name is [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
+The players are as follows: [INSERT PLAYER NAMES HERE].
+
+You are [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
 """
 
 FASCIST_TRACK_5_6_PLAYERS = \

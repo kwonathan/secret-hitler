@@ -6,24 +6,27 @@ import prompts
 def generate_roles(number_of_players):
     roles = []
     if number_of_players == 5:
-        roles = ["Liberal"] * 3 + ["Fascist"] * 1 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 3 + ["a Fascist"] * 1 + ["Hitler"] * 1
     elif number_of_players == 6:
-        roles = ["Liberal"] * 4 + ["Fascist"] * 1 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 4 + ["a Fascist"] * 1 + ["Hitler"] * 1
     elif number_of_players == 7:
-        roles = ["Liberal"] * 4 + ["Fascist"] * 2 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 4 + ["a Fascist"] * 2 + ["Hitler"] * 1
     elif number_of_players == 8:
-        roles = ["Liberal"] * 5 + ["Fascist"] * 2 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 5 + ["a Fascist"] * 2 + ["Hitler"] * 1
     elif number_of_players == 9:
-        roles = ["Liberal"] * 5 + ["Fascist"] * 3 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 5 + ["a Fascist"] * 3 + ["Hitler"] * 1
     elif number_of_players == 10:
-        roles = ["Liberal"] * 6 + ["Fascist"] * 3 + ["Hitler"] * 1
+        roles = ["a Liberal"] * 6 + ["a Fascist"] * 3 + ["Hitler"] * 1
     random.shuffle(roles)
 
     return roles
 
 
-def populate_main_prompt(num_players, name, role):
+def populate_main_prompt(players, name, role):
+    num_players = len(players)
     prompt = prompts.MAIN_PROMPT.replace("[INSERT NUMBER OF PLAYERS HERE]", num_players)
+    player_names = ", ".join([player.name for player in players[:-1]]) + f", and {players[-1].name}"
+    prompt = prompt.replace("[INSERT PLAYER NAMES HERE]", player_names)
     prompt = prompt.replace("[INSERT NAME HERE]", name)
     prompt = prompt.replace("[INSERT ROLE HERE]", role)
     prompt = prompt.replace("[INSERT PARTY HERE]", "Liberal" if role == "Liberal" else "Fascist")
