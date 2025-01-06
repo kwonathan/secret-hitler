@@ -35,6 +35,8 @@ Each player also has "Ja!" and "Nein!" ballots for voting on the government.
 The Fascist track is used to keep track of the number of Fascist Policies enacted.
 The following Fascist track is used for a game with [INSERT NUMBER OF PLAYERS HERE] players:
 [INSERT FASCIST TRACK HERE]
+The following Liberal track is used:
+[EMPTY] -> [EMPTY] -> [EMPTY] -> [EMPTY] -> [The Liberals win!]
 
 GAMEPLAY:
 
@@ -121,6 +123,24 @@ The President draws three Policy tiles, discards one, and passes the remaining t
 Each use of the Veto Power represents an inactive government and advances the Election Tracker by one.
 
 Your name is [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
+"""
+
+FASCIST_TRACK_5_6_PLAYERS = \
+"""For a game with 5 or 6 players, there are 1 Fascist and 1 Hitler. Hitler knows who the Fascist is.
+The following Fascist track is used:
+[EMPTY] -> [EMPTY] -> [Policy Peek: The President examines the top three cards.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
+"""
+
+FASCIST_TRACK_7_8_PLAYERS = \
+"""For a game with 7 or 8 players, there are 2 Fascists and 1 Hitler. Hitler doesn't know who the Fascists are.
+The following Fascist track is used:
+[EMPTY] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
+"""
+
+FASCIST_TRACK_9_10_PLAYERS = \
+"""For a game with 9 or 10 players, there are 3 Fascists and 1 Hitler. Hitler doesn't know who the Fascists are.
+The following Fascist track is used:
+[Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
 """
 
 HITLER_PROMPT_5_6_PLAYERS = \
