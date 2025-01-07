@@ -30,10 +30,9 @@ OR
 GAME SETUP:
 
 There are 17 Policy tiles (6 Liberal, 11 Fascist). These have been shuffled and placed face down to form the Policy deck.
-There are [INSERT NUMBER OF PLAYERS HERE] players ([INSERT NUMBER OF LIBERALS] Liberals, [INSERT NUMBER OF FASCISTS] Fascists, and 1 Hitler).
+There are [INSERT NUMBER OF PLAYERS HERE] players ([INSERT NUMBER OF LIBERALS] Liberals, [INSERT NUMBER OF FASCISTS] Fascist(s), and 1 Hitler).
 Each player also has "Ja!" and "Nein!" ballots for voting on the government.
 The Fascist track is used to keep track of the number of Fascist Policies enacted.
-The following Fascist track is used for a game with [INSERT NUMBER OF PLAYERS HERE] players:
 [INSERT FASCIST TRACK HERE]
 The following Liberal track is used:
 [EMPTY] -> [EMPTY] -> [EMPTY] -> [EMPTY] -> [The Liberals win!]
@@ -124,41 +123,43 @@ Each use of the Veto Power represents an inactive government and advances the El
 
 The players are as follows: [INSERT PLAYER NAMES HERE].
 
-You are [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party.
+You are [INSERT NAME HERE]. You are [INSERT ROLE HERE]. You are a member of the [INSERT PARTY HERE] party. [INSERT HITLER/FASCIST INFO HERE]
+
+IMPORTANT:
+Anything you say in this chat will be visible to all players. You will no longer be able to talk to me in private, but you will instead be talking to the group. Reply as you would normally, without any special commands or formatting.
+Be sure to keep your role secret from the other players. Good luck!
 """
 
 FASCIST_TRACK_5_6_PLAYERS = \
 """For a game with 5 or 6 players, there are 1 Fascist and 1 Hitler. Hitler knows who the Fascist is.
 The following Fascist track is used:
-[EMPTY] -> [EMPTY] -> [Policy Peek: The President examines the top three cards.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
-"""
+[EMPTY] -> [EMPTY] -> [Policy Peek: The President examines the top three cards.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]"""
 
 FASCIST_TRACK_7_8_PLAYERS = \
 """For a game with 7 or 8 players, there are 2 Fascists and 1 Hitler. Hitler doesn't know who the Fascists are.
 The following Fascist track is used:
-[EMPTY] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
-"""
+[EMPTY] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]"""
 
 FASCIST_TRACK_9_10_PLAYERS = \
 """For a game with 9 or 10 players, there are 3 Fascists and 1 Hitler. Hitler doesn't know who the Fascists are.
 The following Fascist track is used:
-[Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]
-"""
+[Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Investigate Loyalty: The President investigates a player's Party Membership card.] -> [Call Special Election: The President picks the next Presidential Candidate.] -> [Execution: The President must kill a player.] -> [Execution: The President must kill a player. Veto Power is unlocked.] -> [The Fascists win!]"""
 
 HITLER_PROMPT_5_6_PLAYERS = \
-"""[INSERT FASCIST NAME] is the Fascist.
-"""
+"""[INSERT FASCIST NAME] is the Fascist."""
 
 FASCIST_PROMPT_5_6_PLAYERS = \
-"""[INSERT HITLER NAME] is Hitler.
-"""
+"""[INSERT HITLER NAME] is Hitler."""
 
 FASCIST_PROMPT_7_10_PLAYERS = \
-"""[INSERT FASCIST NAMES] are the Fascists. [INSERT HITLER NAME] is Hitler.
-"""
+"""[INSERT FASCIST NAMES] are the Fascists. [INSERT HITLER NAME] is Hitler."""
 
 CHANCELLOR_NOMINATION_PROMPT_PRESIDENT = \
 """You are now the President. You must nominate a Chancellor. You can either choose to nominate a Chancellor yourself or discuss Chancellor options with the table to build consensus and make it more likely the Government gets elected. Answer either "I nominate [INSERT CHANCELLOR NAME] as Chancellor." or "I would like to discuss Chancellor options."
+"""
+
+CHANCELLOR_NOMINATION_PROMPT_DISCUSSION = \
+"""[INSERT PRESIDENT NAME] is now the President, who has opened the floor for discussion on Chancellor options. Offer your thoughts on who should be nominated as Chancellor.
 """
 
 CHANCELLOR_NOMINATION_PROMPT_PLAYER = \
