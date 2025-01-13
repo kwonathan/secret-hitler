@@ -154,16 +154,59 @@ FASCIST_PROMPT_5_6_PLAYERS = \
 FASCIST_PROMPT_7_10_PLAYERS = \
 """[INSERT FASCIST NAMES] are the Fascists. [INSERT HITLER NAME] is Hitler."""
 
-CHANCELLOR_NOMINATION_PROMPT_PRESIDENT = \
+CHANCELLOR_NOMINATION_PROMPT = \
 """You are now the President. You must nominate a Chancellor. You can either choose to nominate a Chancellor yourself or discuss Chancellor options with the table to build consensus and make it more likely the Government gets elected. Answer either "I nominate [INSERT CHANCELLOR NAME] as Chancellor." or "I would like to discuss Chancellor options."
 """
 
-CHANCELLOR_NOMINATION_PROMPT_DISCUSSION = \
-"""[INSERT PRESIDENT NAME] is now the President, who has opened the floor for discussion on Chancellor options. Offer your thoughts on who should be nominated as Chancellor.
+VOTE_PROMPT = \
+"""[INSERT PRESIDENT NAME] is now the President, who has nominated [INSERT CHANCELLOR NAME] as Chancellor. You must now vote on the proposed government. Answer either "Ja!" if you want to vote yes, and "Nein!" if you want to vote no.
 """
 
-CHANCELLOR_NOMINATION_PROMPT_PLAYER = \
-"""[INSERT PRESIDENT NAME] is now the President, who has nominated [INSERT CHANCELLOR NAME] as Chancellor. You must now vote on the proposed government. Answer either "Ja!" or "Nein!"
+ENACT_POLICY_PROMPT_PRESIDENT = \
+"""You are now the President. You must enact a Policy. You have drawn the following Policies:
+[INSERT POLICY 1], [INSERT POLICY 2], [INSERT POLICY 3]
+State which Policy you are discarding face down, by saying "<<<I discard a [INSERT POLICY] Policy.>>>" This information will not be shared with the group, and the remaining Policies will be passed to the Chancellor.
+"""
+
+ENACT_POLICY_PROMPT_CHANCELLOR = \
+"""You are now the Chancellor. You must enact a Policy. You have been given the following Policies from the President:
+[INSERT POLICY 1], [INSERT POLICY 2]
+State which Policy you are discarding face down, by saying "<<<I discard a [INSERT POLICY] Policy.>>>" This information will not be shared with the group, and the remaining Policy will be enacted.
+"""
+
+ENACT_POLICY_VETO_PROMPT = \
+"""Veto Power has been unlocked. You may now, instead of enacting a Policy, say "I wish to veto this agenda." If the President consents by saying, "I agree to the veto," both Policies are discarded and the President placard passes to the left as usual. If the President does not consent, you must enact a Policy as normal.
+"""
+
+VETO_ACCEPT_PROMPT = \
+"""The Chancellor has requested to veto this agenda. You as the President must now decide whether to accept the veto. Answer either "I agree to the veto." or "I do not agree to the veto."
+"""
+
+REVEAL_ENACTED_POLICY_PROMPT = \
+"""You may share (or lie about!) your discarded Policy tile with the group.
+Share (or lie about!) which Policy you discarded by saying "I discarded a [INSERT POLICY] Policy."
+If you do not wish to share this information, you may say "I choose not to reveal my discarded Policy."
+"""
+
+INVESTIGATE_LOYALTY_PROMPT = \
+"""You as the President have the power to investigate a player's Party Membership card. Choose a player to investigate by saying "I investigate [INSERT PLAYER NAME] for loyalty." The player will then hand you their Party Membership card, which you will check in secret. If you wish to discuss this power with the group, you may do so before making your decision, by saying "I would like to discuss the Investigate Loyalty power."
+"""
+
+REVEAL_PARTY_MEMBERSHIP_PROMPT = \
+"""You as the President has just investigated [INSERT INVESTIGATED PLAYER NAME]. The player is a [INSERT INVESTIGATED PLAYER PARTY MEMBERSHIP]. You may now share (or lie about!) the results of your investigation with the group. Say (or lie!) either that "[INSERT PLAYER NAME] is a [INSERT PARTY MEMBERSHIP]." or "I would like to keep this information secret."
+"""
+
+SPECIAL_ELECTION_PROMPT = \
+"""You as the President have the power to call a Special Election. Choose a player to be the next Presidential Candidate by saying "I nominate [INSERT PLAYER NAME] as President." The player will then become the next Presidential Candidate, and the Election will proceed as usual. If you wish to discuss this power with the group, you may do so before making your decision, by saying "I would like to discuss the Special Election power."
+"""
+
+POLICY_PEEK_PROMPT = \
+"""You as the President have the power to peek at the top three Policies in the Policy deck.
+The top three Policies are: [INSERT POLICY 1], [INSERT POLICY 2], [INSERT POLICY 3]
+"""
+
+EXECUTION_PROMPT = \
+"""You as the President have the power to execute a player. Choose a player to execute by saying "I formally execute [INSERT PLAYER NAME]." If you wish to discuss this power with the group, you may do so before making your decision, by saying "I would like to discuss the Execution power."
 """
 
 OPTIONAL_STRATEGY_PROMPT = \

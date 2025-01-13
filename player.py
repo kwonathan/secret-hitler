@@ -1,3 +1,5 @@
+import prompts
+
 from openai import OpenAI
 
 
@@ -5,7 +7,7 @@ class Player:
     def __init__(self, name, role):
         self.name = name
         self.role = role
-        self.party_membership = "Liberal" if self.role == "Liberal" else "Fascist"
+        self.party_membership = "Liberal" if self.role == "a Liberal" else "Fascist"
         self.main_prompt = None
 
         self.client = OpenAI()
@@ -22,10 +24,111 @@ class Player:
             messages=self.messages,
             stream=True
         )
-        print(f"{self.name} ({self.role}) is saying:\n")
+        print(f"%%%%%%%%%% {self.name} ({self.role}) %%%%%%%%%%\n")
         output = ""
         for chunk in stream:
             if chunk.choices[0].delta.content is not None:
                 print(chunk.choices[0].delta.content, end="")
                 output += chunk.choices[0].delta.content
+        print("\n\n")
         self.messages.append({"role": "assistant", "content": output})
+
+        return self.messages[-1]["content"]
+
+    def select_chancellor(self, message_history):
+        message = message_history + "\n\n" + prompts.CHANCELLOR_NOMINATION_PROMPT
+        output = self.chat(message)
+        if "I would like to discuss Chancellor options" in output:
+            return False, output
+        else:
+            return True, output
+
+    def vote(self, message_history):
+        message = message_history + "\n\n" + prompts.VOTE_PROMPT
+        output = self.chat(message)
+        if "Ja!" in output:
+            return "Ja!"
+        elif "Nein!" in output:
+            return "Nein!"
+
+    def enact_policy_president(self, policy_candidates, message_history):
+        message = message_history + "\n\n" + prompts.ENACT_POLICY_PROMPT_PRESIDENT.replace("[INSERT POLICY 1]", policy_candidates[0]).replace("[INSERT POLICY 2]", policy_candidates[1]).replace("[INSERT POLICY 3]", policy_candidates[2])
+        output = self.chat(message)
+        if output.split("I discard a ")[1].split(" Policy")[0] == "Liberal":
+            policy_candidates.remove("Liberal")
+            return "Liberal", policy_candidates
+        else:
+            policy_candidates.remove("Fascist")
+            return "Fascist", policy_candidates
+
+    def enact_policy_chancellor(self, policy_candidates, message_history):
+        message = message_history + "\n\n" + prompts.ENACT_POLICY_PROMPT_CHANCELLOR.replace("[INSERT POLICY 1]", policy_candidates[0]).replace("[INSERT POLICY 2]", policy_candidates[1])
+        output = self.chat(message)
+        if output.split("I discard a ")[1].split(" Policy")[0] == "Liberal":
+            policy_candidates.remove("Liberal")
+            return "Liberal", policy_candidates[0]
+        else:
+            policy_candidates.remove("Fascist")
+            return "Fascist", policy_candidates[0]
+
+    def enact_policy_veto(self, policy_candidates, message_history):
+        message = message_history + "\n\n" + prompts.ENACT_POLICY_PROMPT_CHANCELLOR.replace("[INSERT POLICY 1]", policy_candidates[0]).replace("[INSERT POLICY 2]", policy_candidates[1]) + "\n\n" + prompts.ENACT_POLICY_VETO_PROMPT
+        output = self.chat(message)
+        if "I wish to veto this agenda" in output:
+            return True, None, None
+        else:
+            if output.split("I discard a ")[1].split(" Policy")[0] == "Liberal":
+                policy_candidates.remove("Liberal")
+                return False, "Liberal", policy_candidates[0]
+            else:
+                policy_candidates.remove("Fascist")
+                return False, "Fascist", policy_candidates[0]
+
+    def veto_accepted(self, message_history):
+        message = message_history + "\n\n" + prompts.VETO_ACCEPT_PROMPT
+        output = self.chat(message)
+        if "I agree to the veto" in output:
+            return True
+        else:
+            return False
+
+    def reveal_policy(self, message_history):
+        message = message_history + "\n\n" + prompts.REVEAL_ENACTED_POLICY_PROMPT
+        output = self.chat(message)
+        if "I choose not to reveal my discarded Policy":
+            return False, None
+        else:
+            return True, output
+
+    def investigate_loyalty(self, message_history):
+        message = message_history + "\n\n" + prompts.INVESTIGATE_LOYALTY_PROMPT
+        output = self.chat(message)
+        if "I would like to discuss the Investigate Loyalty power" in output:
+            return False, output
+        else:
+            return True, output
+
+    def reveal_party_membership(self, message_history, investigated_player):
+        message = message_history + "\n\n" + prompts.REVEAL_PARTY_MEMBERSHIP_PROMPT.replace("[INSERT INVESTIGATED PLAYER NAME]", investigated_player.name).replace("[INSERT INVESTIGATED PLAYER PARTY MEMBERSHIP]", investigated_player.party_membership)
+        output = self.chat(message)
+        return output
+
+    def call_special_election(self, message_history):
+        message = message_history + "\n\n" + prompts.SPECIAL_ELECTION_PROMPT
+        output = self.chat(message)
+        if "I would like to discuss the Special Election power" in output:
+            return False, output
+        else:
+            return True, output
+
+    def policy_peek(self, message_history, top_three_policies):
+        message = message_history + "\n\n" + prompts.POLICY_PEEK_PROMPT.replace("[INSERT POLICY 1]", top_three_policies[0]).replace("[INSERT POLICY 2]", top_three_policies[1]).replace("[INSERT POLICY 3]", top_three_policies[2])
+        self.messages.append({"role": "user", "content": message})
+
+    def execute_player(self, message_history):
+        message = message_history + "\n\n" + prompts.EXECUTION_PROMPT
+        output = self.chat(message)
+        if "I would like to discuss the Execution power" in output:
+            return False, output
+        else:
+            return True, output

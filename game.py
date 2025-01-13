@@ -3,7 +3,8 @@ import random
 class Game:
     def __init__(self, players):
         self.players = players
-        self.policy_deck = random.shuffle(["Liberal"] * 6 + ["Fascist"] * 11)
+        self.policy_deck = ["Liberal"] * 6 + ["Fascist"] * 11
+        random.shuffle(self.policy_deck)
         if len(self.players) == 5 or len(self.players) == 6:
             self.fascist_track = "5_6"
         elif len(self.players) == 7 or len(self.players) == 8:
@@ -126,13 +127,16 @@ class Game:
         # LEGISLATIVE SESSION
         policy_candidates = self.draw_pile[:3]
         self.draw_pile = self.draw_pile[3:]
-        discarded_policy, policy_candidates = self.president.enact_policy(policy_candidates)
+        message_history = "\n\n".join(self.message_history)
+        discarded_policy, policy_candidates = self.president.enact_policy_president(policy_candidates, message_history)
         self.discard_pile.append(discarded_policy)
         if self.veto_power:
-            veto, discarded_policy, enacted_policy = self.chancellor.enact_policy_veto(policy_candidates)
+            message_history = "\n\n".join(self.message_history)
+            veto, discarded_policy, enacted_policy = self.chancellor.enact_policy_veto(policy_candidates, message_history)
             if veto:
                 self.message_history.append(f"The Chancellor has requested to veto the Policies.")
-                if self.president.veto_accepted():
+                message_history = "\n\n".join(self.message_history)
+                if self.president.veto_accepted(message_history):
                     self.discard_pile += policy_candidates
                     self.election_tracker += 1
                     if self.election_tracker == 3:
@@ -158,15 +162,25 @@ class Game:
                     return
                 else:
                     self.message_history.append(f"The President has rejected the veto request.")
-                    discarded_policy, enacted_policy = self.chancellor.enact_policy(policy_candidates)
+                    message_history = "\n\n".join(self.message_history)
+                    discarded_policy, enacted_policy = self.chancellor.enact_policy_chancellor(policy_candidates, message_history)
                     self.discard_pile.append(discarded_policy)
             else:
                 self.discard_pile.append(discarded_policy)
         else:
-            discarded_policy, enacted_policy = self.chancellor.enact_policy(policy_candidates)
+            message_history = "\n\n".join(self.message_history)
+            discarded_policy, enacted_policy = self.chancellor.enact_policy_chancellor(policy_candidates, message_history)
             self.discard_pile.append(discarded_policy)
 
         self.message_history.append(f"The President and Chancellor have enacted a {enacted_policy} Policy.")
+        message_history = "\n\n".join(self.message_history)
+        reveal, message = self.president.reveal_policy(message_history)
+        if reveal:
+            self.message_history.append(f"{self.president.name} says: {message}")
+        message_history = "\n\n".join(self.message_history)
+        reveal, message = self.chancellor.reveal_policy(message_history)
+        if reveal:
+            self.message_history.append(f"{self.chancellor.name} says: {message}")
 
         if enacted_policy == "Liberal":
             self.liberal_policies += 1
@@ -250,7 +264,8 @@ class Game:
         elif self.fascist_track == "5_6" and self.fascist_policies == 3:
             # Policy peek
             self.message_history.append(f"The newly enacted Fascist Policy allows the President ({self.president.name}) to look at the next three Policies in the Policy deck.")
-            self.president.policy_peek(self.draw_pile[:3])
+            message_history = "\n\n".join(self.message_history)
+            self.president.policy_peek(message_history, self.draw_pile[:3])
             self.message_history.append(f"{self.president.name} has looked at the next three Policies in the Policy deck.")
 
         else:
