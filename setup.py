@@ -21,8 +21,7 @@ def generate_roles(number_of_players):
 
     return roles
 
-
-def populate_main_prompt(players, player):
+def populate_main_prompt(players, player, strategy):
     num_players = len(players)
     prompt = prompts.MAIN_PROMPT.replace("[INSERT NUMBER OF PLAYERS HERE]", str(num_players))
     player_names = ", ".join([player.name for player in players[:-1]]) + f", and {players[-1].name}"
@@ -37,6 +36,7 @@ def populate_main_prompt(players, player):
             hitler_name = p.name
         elif p.role == "a Fascist":
             fascist_names.append(p.name)
+
     if num_players == 5:
         prompt = prompt.replace("[INSERT NUMBER OF LIBERALS]", str(3))
         prompt = prompt.replace("[INSERT NUMBER OF FASCISTS]", str(1))
@@ -89,5 +89,10 @@ def populate_main_prompt(players, player):
             prompt = prompt.replace("[INSERT HITLER/FASCIST INFO HERE]", prompts.FASCIST_PROMPT_7_10_PLAYERS.replace("[INSERT FASCIST NAMES]", ", ".join(fascist_names[:-1]) + f", and {fascist_names[-1]}").replace("[INSERT HITLER NAME]", hitler_name))
         else:
             prompt = prompt.replace("[INSERT HITLER/FASCIST INFO HERE]", "")
+
+    if strategy:
+        prompt = prompt.replace("[INSERT OPTIONAL STRATEGY PROMPT HERE]", f"\n{prompts.OPTIONAL_STRATEGY_PROMPT}")
+    else:
+        prompt = prompt.replace("[INSERT OPTIONAL STRATEGY PROMPT HERE]", "")
 
     return prompt

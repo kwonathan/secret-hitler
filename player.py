@@ -4,11 +4,12 @@ from openai import OpenAI
 
 
 class Player:
-    def __init__(self, name, role, is_human=False):
+    def __init__(self, name, role, is_human, model):
         self.name = name
         self.role = role
         self.party_membership = "Liberal" if self.role == "a Liberal" else "Fascist"
         self.is_human = is_human
+        self.model = model
         self.main_prompt = None
 
         self.client = OpenAI()
@@ -24,7 +25,7 @@ class Player:
         else:
             self.messages.append({"role": "user", "content": message})
             stream = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=self.model,
                 messages=self.messages,
                 stream=True
             )
