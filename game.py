@@ -18,6 +18,8 @@ class Game:
         self.president_index = 0
         self.election_tracker = 0
         self.nominated_president = None
+        self.last_president = None
+        self.last_chancellor = None
 
         self.liberal_policies = 0
         self.fascist_policies = 0
@@ -45,8 +47,8 @@ class Game:
         current_game_state += f"{self.nominated_president.name} is selecting a Chancellor.\n"
         current_game_state += f"The election tracker is at {self.election_tracker}.\n"
         if self.game_state is not None:
-            current_game_state += f"The last President was {self.president.name}.\n"
-            current_game_state += f"The last Chancellor was {self.chancellor.name}.\n"
+            current_game_state += f"The last President was {self.last_president.name}.\n"
+            current_game_state += f"The last Chancellor was {self.last_chancellor.name}.\n"
         current_game_state += f"There are now {self.liberal_policies} Liberal Policies.\n"
         current_game_state += f"There are now {self.fascist_policies} Fascist Policies."
         self.game_state = current_game_state
@@ -59,6 +61,7 @@ class Game:
                 self.nominated_president = self.players[self.president_index]
             self.generate_game_state()
             self.message_history.append(f"The current game state is:\n{self.game_state}")
+            print(self.message_history[-1])
 
             # Chancellor nomination
             nominated_chancellor = None
@@ -82,25 +85,30 @@ class Game:
             votes = []
             message_history = "\n\n".join(self.message_history)
             for player in self.players:
-                vote = player.vote(message_history)
+                vote = player.vote(message_history, self.nominated_president, nominated_chancellor)
                 votes.append(vote)
                 self.message_history.append(f"{player.name} votes {vote}")
             if votes.count("Ja!") > votes.count("Nein!"):
                 self.election_tracker = 0
                 self.president = self.nominated_president
                 self.chancellor = nominated_chancellor
+                self.last_president = self.president
+                self.last_chancellor = self.chancellor
                 self.message_history.append(f"Majority vote, {self.president.name} becomes the new President and {self.chancellor.name} becomes the new Chancellor.")
+                print(self.message_history[-1])
                 if self.fascist_policies >= 3:
                     if self.chancellor.role == "Hitler":
                         self.hitler_elected = True
                         return
                     else:
                         self.message_history.append(f"{self.chancellor.name} is not Hitler.")
+                        print(self.message_history[-1])
             else:
                 self.election_tracker += 1
                 if self.election_tracker == 3:
                     top_policy = self.draw_pile.pop(0)
                     self.message_history.append(f"Not a majority vote, and the election tracker has moved by 1 to 3. The top Policy in the Policy deck will now be enacted, which is a {top_policy} Policy.")
+                    print(self.message_history[-1])
                     self.election_tracker = 0
                     if top_policy == "Liberal":
                         self.liberal_policies += 1
@@ -113,11 +121,13 @@ class Game:
                             self.six_fascist_policies_enacted = True
                             return
                     if len(self.draw_pile) < 3:
-                        new_policy_deck = random.shuffle(self.draw_pile + self.discard_pile)
+                        new_policy_deck = self.draw_pile + self.discard_pile
+                        random.shuffle(new_policy_deck)
                         self.draw_pile = new_policy_deck
                         self.discard_pile = []
                 else:
                     self.message_history.append(f"Not a majority vote, the election tracker has moved by 1 to {self.election_tracker}. The next player becomes the President.")
+                    print(self.message_history[-1])
 
             if not self.special_election:
                 self.president_index += 1
@@ -135,6 +145,7 @@ class Game:
             veto, discarded_policy, enacted_policy = self.chancellor.enact_policy_veto(policy_candidates, message_history)
             if veto:
                 self.message_history.append(f"The Chancellor has requested to veto the Policies.")
+                print(self.message_history[-1])
                 message_history = "\n\n".join(self.message_history)
                 if self.president.veto_accepted(message_history):
                     self.discard_pile += policy_candidates
@@ -142,6 +153,7 @@ class Game:
                     if self.election_tracker == 3:
                         top_policy = self.draw_pile.pop(0)
                         self.message_history.append(f"Veto accepted by the President, and the election tracker has moved by 1 to 3. The top Policy in the Policy deck will now be enacted, which is a {top_policy} Policy.")
+                        print(self.message_history[-1])
                         self.election_tracker = 0
                         if top_policy == "Liberal":
                             self.liberal_policies += 1
@@ -154,14 +166,19 @@ class Game:
                                 self.six_fascist_policies_enacted = True
                                 return
                         if len(self.draw_pile) < 3:
-                            new_policy_deck = random.shuffle(self.draw_pile + self.discard_pile)
+                            new_policy_deck = self.draw_pile + self.discard_pile
+                            random.shuffle(new_policy_deck)
                             self.draw_pile = new_policy_deck
                             self.discard_pile = []
                     else:
                         self.message_history.append(f"Veto accepted by the President, the election tracker has moved by 1 to {self.election_tracker}. The next player becomes the President.")
+                        print(self.message_history[-1])
+                    self.president = None
+                    self.chancellor = None
                     return
                 else:
                     self.message_history.append(f"The President has rejected the veto request.")
+                    print(self.message_history[-1])
                     message_history = "\n\n".join(self.message_history)
                     discarded_policy, enacted_policy = self.chancellor.enact_policy_chancellor(policy_candidates, message_history)
                     self.discard_pile.append(discarded_policy)
@@ -173,6 +190,7 @@ class Game:
             self.discard_pile.append(discarded_policy)
 
         self.message_history.append(f"The President and Chancellor have enacted a {enacted_policy} Policy.")
+        print(self.message_history[-1])
         message_history = "\n\n".join(self.message_history)
         reveal, message = self.president.reveal_policy(message_history)
         if reveal:
@@ -194,23 +212,33 @@ class Game:
                 return
 
         if len(self.draw_pile) < 3:
-            new_policy_deck = random.shuffle(self.draw_pile + self.discard_pile)
+            new_policy_deck = self.draw_pile + self.discard_pile
+            random.shuffle(new_policy_deck)
             self.draw_pile = new_policy_deck
             self.discard_pile = []
 
         if enacted_policy == "Liberal":
+            self.president = None
+            self.chancellor = None
             return
         if enacted_policy == "Fascist" and self.fascist_track == "5_6" and self.fascist_policies <= 2:
+            self.president = None
+            self.chancellor = None
             return
         if enacted_policy == "Fascist" and self.fascist_track == "7_8" and self.fascist_policies == 1:
+            self.president = None
+            self.chancellor = None
             return
 
         # EXECUTIVE ACTION
         if self.fascist_track == "7_8" and self.fascist_policies == 2 or self.fascist_track == "9_10" and self.fascist_policies <= 2:
             # Investigate loyalty
             self.message_history.append(f"The newly enacted Fascist Policy allows the President ({self.president.name}) to investigate the loyalty of another player.")
+            print(self.message_history[-1])
             self.message_history.append(f"There are {len(self.players)} players in the game: {', '.join([player.name for player in self.players])}.")
+            print(self.message_history[-1])
             self.message_history.append(f"The following players have already been investigated, and cannot be investigated again: {', '.join([player.name for player in self.investigated_players])}.")
+            print(self.message_history[-1])
 
             investigated_player = None
             while investigated_player is None:
@@ -233,12 +261,15 @@ class Game:
             message_history = "\n\n".join(self.message_history)
             message = self.president.reveal_party_membership(message_history, investigated_player)
             self.message_history.append(f"{self.president.name} has investigated {investigated_player.name} for loyalty. Does the President want to share this information with the group?")
+            print(self.message_history[-1])
             self.message_history.append(f"{self.president.name} says: {message}")
 
         elif self.fascist_track == "7_8" and self.fascist_policies == 3 or self.fascist_track == "9_10" and self.fascist_policies == 3:
             # Call Special Election
             self.message_history.append(f"The newly enacted Fascist Policy allows the President ({self.president.name}) to call a Special Election.")
+            print(self.message_history[-1])
             self.message_history.append(f"There are {len(self.players)} players in the game: {', '.join([player.name for player in self.players])}.")
+            print(self.message_history[-1])
 
             special_president = None
             while special_president is None:
@@ -258,20 +289,25 @@ class Game:
                             self.message_history.append(f"{player.name} says: {message}")
 
             self.message_history.append(f"{self.president.name} has called a Special Election. {special_president.name} has been chosen as the new President.")
+            print(self.message_history[-1])
             self.nominated_president = special_president
             self.special_election = True
 
         elif self.fascist_track == "5_6" and self.fascist_policies == 3:
             # Policy peek
             self.message_history.append(f"The newly enacted Fascist Policy allows the President ({self.president.name}) to look at the next three Policies in the Policy deck.")
+            print(self.message_history[-1])
             message_history = "\n\n".join(self.message_history)
             self.president.policy_peek(message_history, self.draw_pile[:3])
             self.message_history.append(f"{self.president.name} has looked at the next three Policies in the Policy deck.")
+            print(self.message_history[-1])
 
         else:
             # Execution
             self.message_history.append(f"The newly enacted Fascist Policy allows the President ({self.president.name}) to execute another player.")
+            print(self.message_history[-1])
             self.message_history.append(f"There are {len(self.players)} players in the game: {', '.join([player.name for player in self.players])}.")
+            print(self.message_history[-1])
 
             player_to_be_executed = None
             while player_to_be_executed is None:
@@ -291,6 +327,7 @@ class Game:
                             self.message_history.append(f"{player.name} says: {message}")
 
             self.message_history.append(f"{self.president.name} has executed {player_to_be_executed.name}.")
+            print(self.message_history[-1])
             if player_to_be_executed.role == "Hitler":
                 self.hitler_dead = True
                 return
@@ -299,7 +336,11 @@ class Game:
             if self.fascist_policies == 5:
                 # Veto Power
                 self.message_history.append(f"For all subsequent Legislative Sessions, the newly enacted Fascist Policy allows the President and the Chancellor to discard all three Policies in the Policy deck if they both agree.")
+                print(self.message_history[-1])
                 self.veto_power = True
+
+        self.president = None
+        self.chancellor = None
 
     def check_win_condition(self):
         if self.hitler_elected or self.six_fascist_policies_enacted:
