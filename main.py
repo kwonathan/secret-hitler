@@ -11,8 +11,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-P", "--players", type=int, choices=[5, 6, 7, 8, 9, 10], default=5, help="specify the number of players")
     parser.add_argument("-H", "--humans", type=int, choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default=0, help="specify the number of human players")
-    parser.add_argument("-S", "--strategy", type=str, choices=["True", "False"], default="False", help="specify whether the AI should use an optional strategy prompt")
-    parser.add_argument("-M", "--model", type=str, choices=["gpt-4o", "gpt-4o-mini"], default="gpt-4o-mini", help="specify the model to use for the AI")
+    parser.add_argument("-S", "--strategy", type=str, choices=["True", "False"], default="False", help="specify whether the LLMs should use an optional strategy prompt")
+    parser.add_argument("-M", "--model", type=str, choices=["gpt-4o", "gpt-4o-mini"], default="gpt-4o-mini", help="specify the model to use for the LLMs")
     args = parser.parse_args()
 
     # Initialise game state
