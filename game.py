@@ -47,8 +47,14 @@ class Game:
         current_game_state += f"{self.nominated_president.name} is selecting a Chancellor.\n"
         current_game_state += f"The election tracker is at {self.election_tracker}.\n"
         if self.game_state is not None:
-            current_game_state += f"The last President was {self.last_president.name}.\n"
-            current_game_state += f"The last Chancellor was {self.last_chancellor.name}.\n"
+            if self.last_president is not None:
+                current_game_state += f"The last President was {self.last_president.name}.\n"
+            else:
+                current_game_state += "There is no previous President.\n"
+            if self.last_chancellor is not None:
+                current_game_state += f"The last Chancellor was {self.last_chancellor.name}.\n"
+            else:
+                current_game_state += "There is no previous Chancellor.\n"
         current_game_state += f"There are now {self.liberal_policies} Liberal Policies.\n"
         current_game_state += f"There are now {self.fascist_policies} Fascist Policies."
         self.game_state = current_game_state
